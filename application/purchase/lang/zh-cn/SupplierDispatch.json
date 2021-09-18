@@ -1,0 +1,403 @@
+[
+  {
+    "id": 8,
+    "0": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "id",
+      "not_null": 1,
+      "value": 0,
+      "field_type": "String",
+      "description": "ID"
+    },
+    "contract_id": 1,
+    "1": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "contract_id",
+      "not_null": 1,
+      "value": 0,
+      "field_type": "String",
+      "description": "\u91c7\u8d2d\u5408\u540c\u7f16\u53f7"
+    },
+    "material_code": 9,
+    "2": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "material_code",
+      "not_null": 1,
+      "value": 0,
+      "field_type": "String",
+      "description": "\u7269\u6599\u7f16\u7801"
+    },
+    "material_name": 6,
+    "3": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "material_name",
+      "not_null": 1,
+      "value": 0,
+      "field_type": "String",
+      "description": "\u7269\u6599\u540d\u79f0"
+    },
+    "supplier_name": "\u4f9b\u5e94\u5546\u540d\u79f0",
+    "4": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "supplier_name",
+      "not_null": 1,
+      "value": "\u4f9b\u5e94\u5546\u540d\u79f0",
+      "field_type": "String",
+      "description": "\u4f9b\u5e94\u5546\u540d\u79f0"
+    },
+    "purchase_station_code": 2,
+    "5": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "purchase_station_code",
+      "not_null": 1,
+      "value": 0,
+      "field_type": "String",
+      "description": "\u91c7\u8d2d\u7ad9\u70b9"
+    },
+    "receive_station_code": 1,
+    "6": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "receive_station_code",
+      "not_null": 1,
+      "value": 0,
+      "field_type": "String",
+      "description": "\u6536\u8d27\u7ad9\u70b9"
+    },
+    "unit": "\u7ed3\u7b97\u5355\u4f4d",
+    "7": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "unit",
+      "not_null": 1,
+      "value": "\u7ed3\u7b97\u5355\u4f4d",
+      "field_type": "String",
+      "description": "\u7ed3\u7b97\u5355\u4f4d"
+    },
+    "bill": 7,
+    "8": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "bill",
+      "not_null": 1,
+      "value": 0,
+      "field_type": "String",
+      "description": "\u662f\u5426\u6709\u5c0f\u7968#0 \u67091\u6ca1\u6709"
+    },
+    "supplier_time": "\u4f9b\u5e94\u5546\u53d1\u8d27\u65f6\u95f4",
+    "9": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "supplier_time",
+      "not_null": 1,
+      "value": "\u4f9b\u5e94\u5546\u53d1\u8d27\u65f6\u95f4",
+      "field_type": "Float",
+      "description": "\u4f9b\u5e94\u5546\u53d1\u8d27\u65f6\u95f4"
+    },
+    "supplier_weight": "\u4f9b\u5e94\u5546\u53d1\u8d27\u51c0\u91cd",
+    "10": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "supplier_weight",
+      "not_null": 1,
+      "value": "\u4f9b\u5e94\u5546\u53d1\u8d27\u51c0\u91cd",
+      "field_type": "Float",
+      "description": "\u4f9b\u5e94\u5546\u53d1\u8d27\u51c0\u91cd"
+    },
+    "car_plate": "\u8f66\u724c\u53f7",
+    "11": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "car_plate",
+      "not_null": 1,
+      "value": "\u8f66\u724c\u53f7",
+      "field_type": "String",
+      "description": "\u8f66\u724c\u53f7"
+    },
+    "note": "\u5907\u6ce8",
+    "12": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "note",
+      "not_null": 1,
+      "value": "\u5907\u6ce8",
+      "field_type": "String",
+      "description": "\u5907\u6ce8"
+    },
+    "attach_id": 5,
+    "13": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "attach_id",
+      "not_null": 1,
+      "value": 0,
+      "field_type": "String",
+      "description": "\u539f\u59cb\u7968\u636e"
+    },
+    "create_time": "\u521b\u5efa\u65f6\u95f4",
+    "14": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "create_time",
+      "not_null": 1,
+      "value": "\u521b\u5efa\u65f6\u95f4",
+      "field_type": "Float",
+      "description": "\u521b\u5efa\u65f6\u95f4"
+    },
+    "update_time": "\u66f4\u65b0\u65f6\u95f4",
+    "15": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "update_time",
+      "not_null": 1,
+      "value": "\u66f4\u65b0\u65f6\u95f4",
+      "field_type": "Float",
+      "description": "\u66f4\u65b0\u65f6\u95f4"
+    },
+    "code": "\u6d3e\u8f66\u5355\u7f16\u53f7#\u4ee3\u7801\u751f\u6210  \u975eID\u81ea\u589e",
+    "16": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "code",
+      "not_null": 1,
+      "value": "\u6d3e\u8f66\u5355\u7f16\u53f7#\u4ee3\u7801\u751f\u6210  \u975eID\u81ea\u589e",
+      "field_type": "Float",
+      "description": "\u6d3e\u8f66\u5355\u7f16\u53f7#\u4ee3\u7801\u751f\u6210  \u975eID\u81ea\u589e"
+    },
+    "status": "\u72b6\u6001#0\u53d1\u8f661\u5230\u8fbe",
+    "17": {
+      "is_checked": 1,
+      "type": "Text",
+      "key": "status",
+      "not_null": 1,
+      "value": "\u72b6\u6001#0\u53d1\u8f661\u5230\u8fbe",
+      "field_type": "Float",
+      "description": "\u72b6\u6001#0\u53d1\u8f661\u5230\u8fbe"
+    }
+  },
+  {
+    "order": "desc",
+    "limit": 15,
+    "page": 1,
+    "sort": "id",
+    "filter": {
+      "id": 8,
+      "id_OP": "=",
+      "contract_id": 1,
+      "contract_id_OP": "=",
+      "material_code": 9,
+      "material_code_OP": "=",
+      "material_name": 6,
+      "material_name_OP": "=",
+      "supplier_name": "\u4f9b\u5e94\u5546\u540d\u79f0",
+      "supplier_name_OP": "like",
+      "purchase_station_code": 2,
+      "purchase_station_code_OP": "=",
+      "receive_station_code": 1,
+      "receive_station_code_OP": "=",
+      "unit": "\u7ed3\u7b97\u5355\u4f4d",
+      "unit_OP": "like",
+      "bill": 7,
+      "bill_OP": "=",
+      "supplier_time": "\u4f9b\u5e94\u5546\u53d1\u8d27\u65f6\u95f4",
+      "supplier_time_OP": "like",
+      "supplier_weight": "\u4f9b\u5e94\u5546\u53d1\u8d27\u51c0\u91cd",
+      "supplier_weight_OP": "like",
+      "car_plate": "\u8f66\u724c\u53f7",
+      "car_plate_OP": "like",
+      "note": "\u5907\u6ce8",
+      "note_OP": "like",
+      "attach_id": 5,
+      "attach_id_OP": "=",
+      "create_time": "\u521b\u5efa\u65f6\u95f4",
+      "create_time_OP": "like",
+      "update_time": "\u66f4\u65b0\u65f6\u95f4",
+      "update_time_OP": "like",
+      "code": "\u6d3e\u8f66\u5355\u7f16\u53f7#\u4ee3\u7801\u751f\u6210  \u975eID\u81ea\u589e",
+      "code_OP": "like",
+      "status": "\u72b6\u6001#0\u53d1\u8f661\u5230\u8fbe",
+      "status_OP": "like"
+    }
+  },
+  {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "ID",
+        "mock": {
+          "mock": "@integer(1000,1200)"
+        },
+        "default": "1001"
+      },
+      "contract_id": {
+        "type": "integer",
+        "description": "\u91c7\u8d2d\u5408\u540c\u7f16\u53f7",
+        "mock": {
+          "mock": "@integer(1000,1200)"
+        },
+        "default": "1001"
+      },
+      "material_code": {
+        "type": "integer",
+        "description": "\u7269\u6599\u7f16\u7801",
+        "mock": {
+          "mock": "@integer(1000,1009)"
+        },
+        "default": "1001"
+      },
+      "material_name": {
+        "type": "integer",
+        "description": "\u7269\u6599\u540d\u79f0",
+        "mock": {
+          "mock": "@integer(1000,1200)"
+        },
+        "default": "1001"
+      },
+      "supplier_name": {
+        "type": "string",
+        "description": "\u4f9b\u5e94\u5546\u540d\u79f0",
+        "mock": {
+          "mock": "\u4f9b\u5e94\u5546\u540d\u79f0"
+        },
+        "default": "\u4f9b\u5e94\u5546\u540d\u79f0"
+      },
+      "purchase_station_code": {
+        "type": "integer",
+        "description": "\u91c7\u8d2d\u7ad9\u70b9",
+        "mock": {
+          "mock": "@integer(1000,1200)"
+        },
+        "default": "1001"
+      },
+      "receive_station_code": {
+        "type": "integer",
+        "description": "\u6536\u8d27\u7ad9\u70b9",
+        "mock": {
+          "mock": "@integer(1000,1200)"
+        },
+        "default": "1001"
+      },
+      "unit": {
+        "type": "string",
+        "description": "\u7ed3\u7b97\u5355\u4f4d",
+        "mock": {
+          "mock": "",
+          "enum": [
+            "\u516c\u65a4",
+            "\u5428",
+            "\u65b9"
+          ]
+        },
+        "default": "\u5428"
+      },
+      "bill": {
+        "type": "integer",
+        "description": "\u662f\u5426\u6709\u5c0f\u7968#0 \u67091\u6ca1\u6709",
+        "mock": {
+          "mock": "@integer(1000,1200)"
+        },
+        "default": "1001"
+      },
+      "supplier_time": {
+        "type": "string",
+        "description": "\u4f9b\u5e94\u5546\u53d1\u8d27\u65f6\u95f4",
+        "mock": {
+          "mock": "\u4f9b\u5e94\u5546\u53d1\u8d27\u65f6\u95f4"
+        },
+        "default": "\u4f9b\u5e94\u5546\u53d1\u8d27\u65f6\u95f4"
+      },
+      "supplier_weight": {
+        "type": "number",
+        "description": "\u4f9b\u5e94\u5546\u53d1\u8d27\u51c0\u91cd",
+        "mock": {
+          "mock": 67.08
+        },
+        "default": "10"
+      },
+      "car_plate": {
+        "type": "string",
+        "description": "\u8f66\u724c\u53f7",
+        "mock": {
+          "mock": "\u8f66\u724c\u53f7"
+        },
+        "default": "\u8f66\u724c\u53f7"
+      },
+      "note": {
+        "type": "string",
+        "description": "\u5907\u6ce8",
+        "mock": {
+          "mock": "\u5907\u6ce8"
+        },
+        "default": "\u5907\u6ce8"
+      },
+      "attach_id": {
+        "type": "integer",
+        "description": "\u539f\u59cb\u7968\u636e",
+        "mock": {
+          "mock": "@integer(1000,1200)"
+        },
+        "default": "1001"
+      },
+      "create_time": {
+        "type": "string",
+        "description": "\u521b\u5efa\u65f6\u95f4",
+        "mock": {
+          "mock": "\u521b\u5efa\u65f6\u95f4"
+        },
+        "default": "\u521b\u5efa\u65f6\u95f4"
+      },
+      "update_time": {
+        "type": "string",
+        "description": "\u66f4\u65b0\u65f6\u95f4",
+        "mock": {
+          "mock": "\u66f4\u65b0\u65f6\u95f4"
+        },
+        "default": "\u66f4\u65b0\u65f6\u95f4"
+      },
+      "code": {
+        "type": "string",
+        "description": "\u6d3e\u8f66\u5355\u7f16\u53f7#\u4ee3\u7801\u751f\u6210  \u975eID\u81ea\u589e",
+        "mock": {
+          "mock": "\u6d3e\u8f66\u5355\u7f16\u53f7#\u4ee3\u7801\u751f\u6210  \u975eID\u81ea\u589e"
+        },
+        "default": "\u6d3e\u8f66\u5355\u7f16\u53f7#\u4ee3\u7801\u751f\u6210  \u975eID\u81ea\u589e"
+      },
+      "status": {
+        "type": "string",
+        "description": "\u72b6\u6001#0\u53d1\u8f661\u5230\u8fbe",
+        "mock": {
+          "mock": "\u72b6\u6001#0\u53d1\u8f661\u5230\u8fbe"
+        },
+        "default": "\u72b6\u6001#0\u53d1\u8f661\u5230\u8fbe"
+      }
+    },
+    "required": [
+      "id",
+      "contract_id",
+      "material_code",
+      "material_name",
+      "supplier_name",
+      "purchase_station_code",
+      "receive_station_code",
+      "unit",
+      "bill",
+      "supplier_time",
+      "supplier_weight",
+      "car_plate",
+      "note",
+      "attach_id",
+      "create_time",
+      "update_time",
+      "code",
+      "status"
+    ]
+  }
+]

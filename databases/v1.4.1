@@ -1,0 +1,550 @@
+CREATE TABLE `hnzl_attachment`  (
+  `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id',
+  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '物理路径',
+  `imagewidth` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '宽度',
+  `imageheight` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '高度',
+  `imagetype` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '图片类型',
+  `imageframes` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '图片帧数',
+  `upload_name` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '上传名',
+  `filesize` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '文件大小',
+  `mimetype` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'mime类型',
+  `extparam` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '透传数据',
+  `storage` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'local' COMMENT '存储位置',
+  `sha1` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '文件 sha1编码',
+  `is_used` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否使用中，非使用中文件 定期清除',
+  `use_area` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '下一步使用地址',
+  `create_time` bigint(12) NULL DEFAULT 0 COMMENT '创建日期',
+  `update_time` bigint(12) NULL DEFAULT 0 COMMENT '更新时间',
+  `use_module` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '使用模块',
+  `use_controller` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '使用控制器',
+  `use_action` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '使用方法',
+  `key` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '用于多个文件引用',
+  `upload_type` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `key`(`key`)
+) ENGINE = InnoDB AUTO_INCREMENT = 44 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '附件表' ROW_FORMAT = Compact;
+
+CREATE TABLE `hnzl_auth_group`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `pid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父组别',
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '组名',
+  `rules` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '规则ID',
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态 默认0 正常 其他自定义',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `id`(`id`, `pid`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '分组表' ROW_FORMAT = Compact;
+
+CREATE TABLE `hnzl_auth_group_access`  (
+  `user_id` int(10) UNSIGNED NOT NULL COMMENT '用户ID',
+  `group_id` int(10) UNSIGNED NOT NULL COMMENT '组别ID',
+  UNIQUE INDEX `uid_group_id`(`user_id`, `group_id`),
+  INDEX `uid`(`user_id`) USING BTREE,
+  INDEX `group_id`(`group_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户-权限分组表' ROW_FORMAT = Compact;
+
+CREATE TABLE `hnzl_auth_rule`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `pid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '父ID',
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '规则（src路径）',
+  `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '规则显示名称',
+  `icon` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '图标',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `ismenu` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否为菜单，',
+  `weigh` int(10) NOT NULL DEFAULT 0 COMMENT '权重',
+  `index` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '前端路由',
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态，默认0 ',
+  `type` enum('self','http_self','http_new') CHARACTER SET armscii8 COLLATE armscii8_general_ci NULL DEFAULT 'self' COMMENT '打开方式',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `is_show` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否显示',
+  `index_path` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '前端路径',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `name`(`name`, `id`, `status`) USING BTREE,
+  INDEX `pid`(`pid`) USING BTREE,
+  INDEX `weigh`(`weigh`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 69 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '权限节点表' ROW_FORMAT = Compact;
+
+CREATE TABLE `hnzl_check_history`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `station_code` int(10) NOT NULL DEFAULT 0 COMMENT '站点编码',
+  `material_code` int(10) NOT NULL DEFAULT 0 COMMENT '物料编码',
+  `up_num` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '上次数量',
+  `now_num` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '盘点后数量',
+  `change_num` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '修改数量',
+  `type` int(1) NOT NULL DEFAULT 0 COMMENT '盘盈/亏#0盈亏',
+  `note` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `update_user` int(10) NOT NULL DEFAULT 0 COMMENT '盘点人',
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '盘点记录表\n#记录盘盈盘亏\n#消耗表统计消耗\n#进货表统计进货\n#当前数量=进货+(-消耗)+盘(盈/-亏) 3表统计 确定数量' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_config`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '名称关键字',
+  `value` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '值',
+  `type` enum('default','station_title','user_type','upload','login','logo','title','login_default','unit','unit_desc','balance_unit','balance_unit_desc','laboratory') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'default' COMMENT '类型 station/user_type/  英文表示，后续类型根据开发添加  ',
+  `note` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '其他及备注等',
+  `is_delete` int(1) NULL DEFAULT 0 COMMENT '是否删除',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `id`(`id`) USING BTREE,
+  INDEX `type`(`type`) USING BTREE COMMENT '类型索引'
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '配置表' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_contract`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(10) NOT NULL DEFAULT 0 COMMENT '供应商编码#用于选择 ',
+  `material_code` int(10) NOT NULL DEFAULT 0 COMMENT '物料编码',
+  `purchase_supplier` int(10) NOT NULL DEFAULT 0 COMMENT '供应单位编码',
+  `receive_station_code` int(10) NOT NULL DEFAULT 0 COMMENT '采购单位编码',
+  `unit` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '结算单位',
+  `status` int(1) NOT NULL DEFAULT 0 COMMENT '状态#0启用1不启用',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `supplier_name` varchar(50) NOT NULL DEFAULT '' COMMENT '供应商名称',
+  `pid` int(10) NOT NULL DEFAULT 0 COMMENT '父级订单',
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '供货合同\n#用户有站点权限 即可给站点(收货站点)采购\n#自采为自己给自己采购 自己作为三方\n#站点权限->限制采购站点 \n#收货站点不做限制\n# 页面分为两个页面   \n# 1(站点) 收货合同列表页面 显示所有收货为自己的合同 用户->本站角度\n# 2(站点) 采购合同列表页面 显示所有采购为自己的合同  用户->三方角度\n' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_host`  (
+  `host_code` int(10) NOT NULL COMMENT '主机编号',
+  `host_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '主机名称',
+  `host_ip` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'ip地址',
+  `db_type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '主机数据库类型',
+  `db_port` int(10) NULL DEFAULT 0 COMMENT '数据库端口号',
+  `db_user` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '数据库账号',
+  `db_pass` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '数据库密码',
+  `db_silo_tb` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '料位表名称',
+  `db_recipe_tb` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '配比表名称',
+  `db_cost_tb` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '消耗表名称',
+  `factory` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '生产厂家',
+  `sys_version` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '系统版本',
+  `note` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
+  `station_code` int(10) NOT NULL DEFAULT 0 COMMENT '站点编码',
+  `status` int(1) NULL DEFAULT 0 COMMENT '连接状态#1正常0未测试-1失败',
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `db_version` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '数据库版本',
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '主机表' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_host_silo`  (
+  `silo_code` int(10) NOT NULL COMMENT '料仓编码',
+  `silo_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '料仓名称',
+  `host_code` int(10) NOT NULL DEFAULT 0 COMMENT '主机编码',
+  `station_code` int(10) NOT NULL DEFAULT 0 COMMENT '站点编码',
+  `field_silo` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '料位表字段',
+  `field_recipe` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '配比表字段',
+  `field_cost` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '消耗表字段',
+  `material_code` int(10) NULL DEFAULT 0 COMMENT '默认材料编码',
+  `material_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '默认材料名称',
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `status` int(1) NULL DEFAULT 0 COMMENT '状态 0 未映射 -1失败  1成功',
+  PRIMARY KEY (`id`),
+  INDEX `unique`(`silo_code`, `host_code`, `station_code`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '主机-料位表' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_log`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'ip地址',
+  `type` tinyint(2) NOT NULL DEFAULT 0 COMMENT ' 类型  新增1，删除2,批量删除22，修改3，批量修改33，查询列表4，查看(单条)44，',
+  `user_id` int(255) NOT NULL DEFAULT 0 COMMENT '用户id',
+  `user_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '用户名',
+  `module` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '模块',
+  `controller` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '控制器',
+  `action` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '方法',
+  `params` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '参数',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '内容',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  PRIMARY KEY (`id`, `type`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 525 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '日志表' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_material`  (
+  `material_code` int(10) NOT NULL COMMENT '主物料表编码',
+  `material_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '物料名称',
+  `station_code` int(10) NULL DEFAULT 0 COMMENT '站点编码',
+  `material_cate_id` int(10) NOT NULL DEFAULT 0 COMMENT '分类id',
+  `status` int(1) NULL DEFAULT 0 COMMENT '状态#1启用0禁用'
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '站点物料表' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_material_cate`  (
+  `material_cate_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '分类id',
+  `cate_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '分类名称',
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态#0启用1不启用',
+  `create_time` bigint(12) NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`material_cate_id`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '物料编码分类表\n' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_material_master`  (
+  `material_code` int(10) NOT NULL COMMENT '材料编码',
+  `material_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '材料名称',
+  `sort` int(10) NOT NULL DEFAULT 0 COMMENT '排序号',
+  `unit` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '基本单位',
+  `unit_desc` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '基本单位描述',
+  `coefficient` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '基本系数',
+  `balance_unit` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '结算单位',
+  `balance_unit_desc` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '结算单位描述',
+  `cal_coefficient` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '折算系数',
+  `desc` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '物料描述',
+  `material_cate_id` int(10) NOT NULL DEFAULT 0 COMMENT '分类id',
+  `status` int(1) NULL DEFAULT 0 COMMENT '状态#1启用0禁用',
+  PRIMARY KEY (`material_code`),
+  UNIQUE INDEX `material_name`(`material_name`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '物料编码主表\n' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_material_num`  (
+  `material_code` int(10) NOT NULL COMMENT '主物料表编码',
+  `station_code` int(10) NOT NULL DEFAULT 0 COMMENT '站点编码',
+  `material_cate_id` int(10) NOT NULL DEFAULT 0 COMMENT '分类id',
+  `up_check_num` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '上次盘库结果',
+  `now_num` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '当前余量',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间#'
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '站点物料余量表' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_notice`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '序号',
+  `send_time` int(12) NOT NULL DEFAULT 0 COMMENT '发送时间',
+  `title` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '标题',
+  `content` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '内容',
+  `add_user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '发送人',
+  `add_user` int(10) NOT NULL DEFAULT 0 COMMENT '发送人id',
+  `to_user` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '接收人 json串',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `read_num` int(10) NOT NULL DEFAULT 0 COMMENT '已读人数',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_notice_detail`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `title` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '标题',
+  `content` varchar(5000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '包含内容',
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态 1 已读  0未读',
+  `to_user` int(10) NOT NULL DEFAULT 0 COMMENT '发送用户',
+  `add_user` int(10) NOT NULL DEFAULT 0 COMMENT '消息创建用户',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `up_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '上次通知时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '消息表' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_purchase`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `code` bigint(16) NOT NULL DEFAULT 0 COMMENT '进货编号',
+  `contract_id` int(10) NOT NULL DEFAULT 0 COMMENT '采购合同编号',
+  `supplier_dispatch_id` int(10) NOT NULL DEFAULT 0 COMMENT '派车单id',
+  `material_code` int(10) NOT NULL DEFAULT 0 COMMENT '物料编码',
+  `material_name` varchar(50) NOT NULL DEFAULT '' COMMENT '物料名称',
+  `supplier_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '供应商名称',
+  `purchase_station_code` int(10) NOT NULL DEFAULT 0 COMMENT '采购站点',
+  `receive_station_code` int(10) NOT NULL DEFAULT 0 COMMENT '收货站点',
+  `unit` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '结算单位',
+  `bill` int(1) NOT NULL DEFAULT 0 COMMENT '是否有小票#0 有1没有',
+  `supplier_time` int(10) NOT NULL DEFAULT 0 COMMENT '供应商发货时间',
+  `supplier_weight` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '供应商发货净重',
+  `car_plate` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '车牌号',
+  `attach_id` int(10) NOT NULL DEFAULT 0 COMMENT '原始票据',
+  `gross_weight` int(10) NOT NULL DEFAULT 0 COMMENT '车辆毛重',
+  `tare_weight` int(10) NOT NULL DEFAULT 0 COMMENT '车辆皮重',
+  `net_weight` int(10) NOT NULL DEFAULT 0 COMMENT '过磅净重',
+  `deduct_percent` decimal(10, 3) NOT NULL DEFAULT 0 COMMENT '扣除比例',
+  `deduct_num` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '扣除数量',
+  `cal_weight` int(10) NOT NULL DEFAULT 0 COMMENT '进站净重#货品净重*(1-净重扣杂比例)-净重扣杂数量',
+  `convert_num` int(10) NOT NULL DEFAULT 1000 COMMENT '折算系数#',
+  `convert_weight` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '折算结果#',
+  `note` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `storage_place_id` int(10) NOT NULL DEFAULT 1000 COMMENT '存放地',
+  `purchase_price` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '供应商价格',
+  `station_price` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '站点价格',
+  `trans_price` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '运价',
+  `trans_money` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '运费',
+  `station_money` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '站点总价',
+  `purchase_money` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '采购总价',
+  `trans_purchase_price` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '采购运价',
+  `trans_purchase_money` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '采购运费',
+  `status` int(1) NOT NULL DEFAULT 0 COMMENT '状态#0皮重1正常   7皮重->删除 8正常->作废   9',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间#进站时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `way_out_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '出站时间',
+  `way_in_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '进站时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '进货单' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_recipe`  (
+  `recipe_code` int(10) NOT NULL AUTO_INCREMENT COMMENT '配比编号',
+  `material_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '配比产物物料',
+  `recipe_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '配比名称',
+  `slump` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '塌落度',
+  `station_code` int(10) NOT NULL COMMENT '站点编码',
+  `host_code` int(10) NOT NULL COMMENT '主机编码',
+  `create_time` bigint(12) NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NULL DEFAULT 0 COMMENT '更新时间',
+  `note` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
+  PRIMARY KEY (`recipe_code`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '配比库' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_recipe_base`  (
+  `material_code` int(10) NOT NULL COMMENT '材料编码',
+  `material_num` decimal(10, 4) NOT NULL COMMENT '材料数量',
+  `material_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '材料名称',
+  `recipe_code` int(10) NOT NULL COMMENT '配比编号',
+  `float_up` decimal(10, 4) NOT NULL COMMENT '向上浮动',
+  `float_down` decimal(10, 4) NOT NULL COMMENT '向下浮动'
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '基础配比表\n' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_recipe_material`  (
+  `rm_id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '自定义生产名称',
+  `produce_code` int(10) NOT NULL COMMENT '生产编号',
+  `silo_mar_id` int(10) NOT NULL COMMENT '主机-料位id',
+  `type` int(1) NULL DEFAULT 0 COMMENT '使用状态#0默认最新下发1参考',
+  `product_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '物料名称',
+  `product_code` int(10) NOT NULL COMMENT '物料编码',
+  `host_code` int(10) NOT NULL COMMENT '主机编码',
+  `station_code` int(10) NOT NULL COMMENT '站点编码',
+  `status` int(1) NULL DEFAULT 0 COMMENT '审核状态#通过-1未通过 0待审核',
+  `proj_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '项目名称',
+  `proj_area` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '项目地址',
+  `recipe_code` int(10) NULL DEFAULT 0 COMMENT '配比编号',
+  `create_time` bigint(12) NULL DEFAULT 0 COMMENT '创建时间',
+  `status_time` bigint(12) NULL DEFAULT 0 COMMENT '审核时间',
+  `cost_time` bigint(12) NULL DEFAULT 0 COMMENT '消耗时间',
+  `season` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '季节',
+  `time_type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '时间',
+  `note` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
+  `slump` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '塌落度',
+  PRIMARY KEY (`rm_id`),
+  INDEX `type`(`status`, `type`),
+  INDEX `product`(`produce_code`, `product_name`, `product_code`, `host_code`, `station_code`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '配比-消耗表' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_recipe_material_base`  (
+  `rmb_id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `type` int(1) NOT NULL DEFAULT 0 COMMENT '使用状态0默认最新下发1参考',
+  `silo_mar_id` int(10) NOT NULL DEFAULT 0 COMMENT '料位ID',
+  `product_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '产品名称',
+  `product_code` int(10) NOT NULL COMMENT '产品编码',
+  `host_code` int(10) NOT NULL COMMENT 'host_code',
+  `station_code` int(10) NOT NULL COMMENT '站点编码',
+  `recipe_code` int(10) NOT NULL COMMENT '配方编码',
+  `update_user` int(10) NULL COMMENT '创建人',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `status` int(1) NULL DEFAULT 0 COMMENT '审核状态#1通过0未审核-1不通过',
+  `season` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '季节#春夏秋冬',
+  `time_type` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '时间#白天晚上',
+  `note` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `slump` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+  `check_user` int(10) NULL DEFAULT 0 COMMENT '审核人',
+  PRIMARY KEY (`rmb_id`),
+  INDEX `type`(`type`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '理论生产配比表' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_rm_detail`  (
+  `rm_id` int(10) NOT NULL,
+  `produce_code` int(10) NOT NULL COMMENT '生产编号',
+  `pos_code` int(10) NULL DEFAULT 0 COMMENT '库位表主键',
+  `material_code` int(10) NOT NULL COMMENT '材料编码',
+  `recipe` decimal(10, 4) NOT NULL COMMENT '下发数量',
+  `cost` decimal(10, 4) NOT NULL COMMENT '实际消耗',
+  `create_time` bigint(12) NULL DEFAULT 0 COMMENT '创建时间',
+  `cost_time` bigint(12) NULL DEFAULT 0 COMMENT '消耗时间',
+  `station_code` int(10) NULL DEFAULT 0 COMMENT '站点编码',
+  `host_code` int(10) NULL DEFAULT 0 COMMENT '主机编码',
+  `id` int(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `rm_id`(`rm_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '配比-消耗明细表' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_rmb_detail`  (
+  `rmb_id` int(10) NOT NULL COMMENT '配比表id',
+  `silo_code` int(10) NOT NULL COMMENT '库位',
+  `material_code` int(10) NOT NULL COMMENT '材料编码',
+  `recipe` decimal(10, 4) NOT NULL COMMENT '配比数量',
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  INDEX `rmb_id`(`rmb_id`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '理论生成配比详情表' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_silo_mar`  (
+  `silo_mar_id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `silo_mar` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '料位-材料对照信息',
+  `host_code` int(10) NOT NULL DEFAULT 0 COMMENT '主机编码',
+  `station_code` int(10) NOT NULL DEFAULT 0 COMMENT '站点编码',
+  `create_time` bigint(12) NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`silo_mar_id`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '主机-料位信息表' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_silo_mar_history`  (
+  `silo_material_id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `silo_mar` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '料位-材料对照信息',
+  `silo_mar_str` varchar(5000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '料位材料对照汉字',
+  `host_code` int(10) NOT NULL DEFAULT 0 COMMENT '主机编码',
+  `station_code` int(10) NOT NULL DEFAULT 0 COMMENT '站点编码',
+  `add_user` int(10) NULL DEFAULT 0 COMMENT '添加用户id',
+  `create_time` bigint(12) NULL DEFAULT 0 COMMENT '创建时间',
+  PRIMARY KEY (`silo_material_id`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '主机-料位历史表' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_station`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '站点名称',
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '站点全称',
+  `value` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '站点编码',
+  `note` varchar(5000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '站点备注',
+  `is_delete` int(1) NOT NULL DEFAULT 0 COMMENT '是否删除',
+  `station_title` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '可选磅单标题',
+  `defalut_in_title` int(10) NOT NULL DEFAULT 0 COMMENT '默认进货磅单标题',
+  `defalut_out_title` int(10) NOT NULL DEFAULT 0 COMMENT '默认出货磅单标题',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `value`(`value`) USING BTREE,
+  INDEX `id`(`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '站点表' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_storage_place`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `material_code` int(10) NOT NULL DEFAULT 0 COMMENT '材料编码',
+  `note` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `station_code` int(10) NOT NULL DEFAULT 0 COMMENT '站点',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE = MyISAM AUTO_INCREMENT = 1000 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '存放地\n#无需关联其他表进行\nMyISAM即可' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_supplier`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `supplier_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '供应商名称',
+  `certificate_num` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '证件编号',
+  `business_scope` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '经营范围',
+  `address` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '地址',
+  `contacts_user` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '联系人',
+  `contacts_tel` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '联系电话',
+  `status` int(1) NOT NULL DEFAULT 0 COMMENT '状态#0启用1禁用',
+  `attach_key` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '附件key',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '供应商\n#供应商列表 不分站点\n#新增附件key attach_key  用于批量获取附件  \n#添加站点时   应把站点作为供应商添加进去' ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `hnzl_supplier_dispatch`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `contract_id` int(10) NOT NULL DEFAULT 0 COMMENT '采购合同编号',
+  `material_code` int(10) NOT NULL DEFAULT 0 COMMENT '物料编码',
+  `material_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '物料名称',
+  `supplier_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '供应商名称',
+  `purchase_station_code` int(10) NOT NULL DEFAULT 0 COMMENT '采购站点',
+  `receive_station_code` int(10) NOT NULL DEFAULT 0 COMMENT '收货站点',
+  `unit` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '结算单位',
+  `bill` int(1) NOT NULL DEFAULT 0 COMMENT '是否有小票#0 有1没有',
+  `supplier_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '供应商发货时间',
+  `supplier_weight` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '供应商发货净重',
+  `car_plate` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '车牌号',
+  `note` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `attach_id` int(10) NOT NULL DEFAULT 0 COMMENT '原始票据',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `code` bigint(16) NOT NULL COMMENT '派车单编号#代码生成  非ID自增',
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态#0发车1完成',
+  `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '司机手机号码',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '供应商派车单\n#派车单编号 代码生成  非ID自增' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_supplier_price`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `contract_id` int(10) NOT NULL DEFAULT 0 COMMENT '合同编号',
+  `purchase_price` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '采购价格#三方价格',
+  `station_price` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '入厂价格#站点价格',
+  `start_time` int(10) NOT NULL DEFAULT 0 COMMENT '开始时间#0为不限制',
+  `cal` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '公式',
+  `end_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '结束时间#0为不限制',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '供应商价格维护' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_supplier_trans_price`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `contract_id` int(10) NOT NULL DEFAULT 0 COMMENT '合同编号',
+  `purchase_price` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '采购运价#三方价格',
+  `station_price` decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '采购运价#站点价格',
+  `start_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '开始时间#',
+  `end_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '结束时间#',
+  `cal` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '公式',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_bin COMMENT = '供应商运价维护' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_user`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `user_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '用户名',
+  `real_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '真实姓名',
+  `password` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '密码',
+  `salt` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '加密串 随机生成',
+  `mobile` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '手机号码',
+  `is_delete` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除 1删除 0默认',
+  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '状态0使用 1禁用',
+  `weigh` int(10) NOT NULL DEFAULT 0 COMMENT '权重、排序使用',
+  `create_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` bigint(12) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `avater` int(10) NOT NULL DEFAULT 0 COMMENT '头像',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_user_file`  (
+  `user_id` int(10) NOT NULL,
+  `used` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '使用数量',
+  `file_count` int(10) NOT NULL DEFAULT 0 COMMENT '文件数量',
+  `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '上传类型',
+  `max_use` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '最大空间',
+  `max_size` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '最大数量',
+  PRIMARY KEY (`user_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户空间使用管理' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_user_station`  (
+  `user_id` int(10) NOT NULL COMMENT '用户id',
+  `user_station_id` int(10) NOT NULL COMMENT '用户类型',
+  UNIQUE INDEX `user_id_station_id`(`user_id`, `user_station_id`) USING BTREE COMMENT '唯一索引 保证数据唯一',
+  INDEX `user_id`(`user_id`) USING BTREE COMMENT 'user_id索引'
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户站点关联表' ROW_FORMAT = Dynamic;
+
+CREATE TABLE `hnzl_user_type`  (
+  `user_id` int(10) NOT NULL COMMENT '用户id',
+  `user_type_id` int(10) NOT NULL COMMENT '用户类型',
+  UNIQUE INDEX `user_id_user_type`(`user_id`, `user_type_id`) USING BTREE COMMENT '唯一索引 保证数据唯一',
+  INDEX `user_id`(`user_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户类型关联表' ROW_FORMAT = Dynamic;
+
+ALTER TABLE `hnzl_attachment` ADD CONSTRAINT `user_id` FOREIGN KEY (`id`) REFERENCES `hnzl_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `hnzl_auth_group_access` ADD CONSTRAINT `user_group` FOREIGN KEY (`user_id`) REFERENCES `hnzl_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `hnzl_auth_group_access` ADD CONSTRAINT `user_grpup_access` FOREIGN KEY (`group_id`) REFERENCES `hnzl_auth_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `hnzl_auth_rule` ADD CONSTRAINT `auth_group` FOREIGN KEY (`id`) REFERENCES `hnzl_auth_group` () ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `hnzl_contract` ADD CONSTRAINT `supplier` FOREIGN KEY (`supplier_id`) REFERENCES `hnzl_supplier` (`id`);
+ALTER TABLE `hnzl_host_silo` ADD CONSTRAINT `host_code` FOREIGN KEY (`host_code`) REFERENCES `hnzl_host` (`host_code`);
+ALTER TABLE `hnzl_log` ADD CONSTRAINT `user_log` FOREIGN KEY (`user_id`) REFERENCES `hnzl_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `hnzl_material` ADD CONSTRAINT `material_code` FOREIGN KEY (`material_code`) REFERENCES `hnzl_material_master` (`material_code`);
+ALTER TABLE `hnzl_material_cate` ADD CONSTRAINT `material` FOREIGN KEY (`material_cate_id`) REFERENCES `hnzl_material_master` (`material_code`);
+ALTER TABLE `hnzl_purchase` ADD CONSTRAINT `storage_place` FOREIGN KEY (`storage_place_id`) REFERENCES `hnzl_storage_place` (`id`);
+ALTER TABLE `hnzl_purchase` ADD CONSTRAINT `sypplier_dispatch` FOREIGN KEY (`supplier_dispatch_id`) REFERENCES `hnzl_supplier_dispatch` (`id`);
+ALTER TABLE `hnzl_recipe_base` ADD CONSTRAINT `recope` FOREIGN KEY (`recipe_code`) REFERENCES `hnzl_recipe` (`recipe_code`);
+ALTER TABLE `hnzl_recipe_material` ADD CONSTRAINT `material_position` FOREIGN KEY (`silo_mar_id`) REFERENCES `hnzl_host_silo` (`silo_code`);
+ALTER TABLE `hnzl_recipe_material` ADD CONSTRAINT `material_name` FOREIGN KEY (`material_code`) REFERENCES `hnzl_material` (`material_name`);
+ALTER TABLE `hnzl_rmb_detail` ADD CONSTRAINT `rmb_id` FOREIGN KEY (`rmb_id`) REFERENCES `hnzl_recipe_material_base` (`rmb_id`);
+ALTER TABLE `hnzl_supplier_dispatch` ADD CONSTRAINT `contract` FOREIGN KEY (`contract_id`) REFERENCES `hnzl_contract` (`id`);
+ALTER TABLE `hnzl_supplier_price` ADD CONSTRAINT `contract` FOREIGN KEY (`contract_id`) REFERENCES `hnzl_contract` (`id`);
+ALTER TABLE `hnzl_supplier_trans_price` ADD CONSTRAINT `contract` FOREIGN KEY (`contract_id`) REFERENCES `hnzl_contract` (`id`);
+ALTER TABLE `hnzl_user_file` ADD CONSTRAINT `user_file` FOREIGN KEY (`used`) REFERENCES `hnzl_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `hnzl_user_station` ADD CONSTRAINT `user_station` FOREIGN KEY (`user_id`) REFERENCES `hnzl_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `hnzl_user_type` ADD CONSTRAINT `user_type` FOREIGN KEY (`user_id`) REFERENCES `hnzl_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>客户端显示数据</title>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js" ></script>
+</head>
+<body>
+<ul id="show">
+
+</ul>
+<textarea id="text" type="text"></textarea>
+<button onclick="sendMsg()">发送消息</button>
+</body>
+<script>
+    var mytoken='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJobnpsIiwiYXVkIjoiIiwiaWF0IjoxNjA3NDk1OTUwLCJuYmYiOjE2MDc0OTU5NTAsImV4cCI6MTYwODIxNTk1MCwidXNlcl9pbmZvIjp7ImlkIjoxLCJ1c2VyX25hbWUiOiJhZG1pbiIsInJlYWxfbmFtZSI6Ilx1NzcxZlx1NWI5ZVx1NTlkM1x1NTQwZCIsInBhc3N3b3JkIjoiZWIwYmJjZTNkOGRiNDJiNzNhMGJlOTljZjFlODQ4NmMiLCJzYWx0IjoiQ1ZzUUVZcGJONCIsIm1vYmlsZSI6IjE1NjI1NTUyNTI1Iiwic3RhdHVzIjowfX0.nVufEmnCdLIZ4B5fF0iZP1Nn-TYul6sGYdQwu1z8VQ4';
+    var websocket;
+    $(function(){
+        WebSocketTest();
+        function WebSocketTest()
+        {
+            if ("WebSocket" in window) {
+                    //1.创建websocket客户端
+                var wsServer = 'ws://127.0.0.1:8901/serverMsg';
+                    websocket = new WebSocket(wsServer,[mytoken]);
+                    //2.注册事件
+                    //2.1 当客户端和服务器简历连接时执行该函数
+                    websocket.onopen = function () {
+                        //console.log("连接上了服务器");
+                        addStr("连接上了服务器")
+                    }
+                    //2.2 当服务器想客户端发送消息时 执行该函数
+                    // event.data 就是服务器发送过来的信息
+                    websocket.onmessage = function (event) {
+                        console.log("接收到服务器发送的信息：" + event.data);
+                        addStr(event.data);
+                    }
+                    // 2.3 当客户端和服务器断开连接时执行函数
+                    websocket.onclose = function (event) {
+                        console.log(event.code );
+                        console.log(event);
+                    }
+                    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+                    window.onbeforeunload = function() {
+                        closeWebSocket();
+                    }
+                    websocket.onerror = function(event) {
+                        console.log(event);
+                    };
+
+
+
+            }else{
+                alert("您的浏览器不支持 WebSocket!");
+            }
+        }
+
+    });
+    function  sendMsg() {
+
+        websocket.send('{"msg":"'+$('#text').val()+'"}');
+    }
+    function addStr(str){
+        $str = "<li>"+str+"</li>";
+        $("#show").html($str);
+    }
+</script>
+</html>

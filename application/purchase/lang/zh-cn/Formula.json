@@ -1,0 +1,1 @@
+[[],{"order":"desc","limit":15,"page":1,"sort":"id"},{"$schema":"http:\/\/json-schema.org\/draft-04\/schema#","type":"object","properties":{"getData":{"type":"integer","description":"\u4e3a1\u65f6 \u83b7\u53d6\u6570\u636e ID","mock":{"mock":""},"default":"0"}},"required":[]}]

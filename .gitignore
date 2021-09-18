@@ -1,0 +1,12 @@
+/.idea
+/.vscode
+/config/database.php
+/public/demo/
+/public/upload/
+/vendor/
+vendor/autoload.php
+/thinkphp/
+runtime
+*.log
+.env
+.DS_Storegit
